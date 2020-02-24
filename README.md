@@ -11,3 +11,11 @@ $ make install
 $ make publish
 $ npm link
 ```
+
+### Get help:
+
+```bash
+$ gendiff -h
+```
+
+[![asciicast](https://asciinema.org/a/svZEudzltpQtpcOTbc7DVW1bF.svg)](https://asciinema.org/a/svZEudzltpQtpcOTbc7DVW1bF)
