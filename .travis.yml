@@ -1,15 +1,15 @@
 language: node_js
 node_js:
   - lts/*
-  env:
-    global:
-      - CC_TEST_REPORTER_ID=d1e18208652a8b3ad1719aebe10398c0fb93415c2439bab579caaa93945fdf19
-  before_script:
-    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-    - chmod +x ./cc-test-reporter
-    - ./cc-test-reporter before-build
-  script:
-    - make lint
-    - make test-coverage
-  after_script:
-    - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+env:
+  global:
+   - CC_TEST_REPORTER_ID=d1e18208652a8b3ad1719aebe10398c0fb93415c2439bab579caaa93945fdf19
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+script:
+  - make lint
+  - make test-coverage
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
