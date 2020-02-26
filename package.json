@@ -30,16 +30,24 @@
     "@babel/node": "^7.8.4",
     "@babel/preset-env": "^7.8.4",
     "babel-eslint": "^10.0.3",
-    "cross-env": "^7.0.0",
+    "babel-jest": "^25.1.0",
+    "debug": "^4.1.1",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-import": "^2.20.0",
-    "jest": "^25.1.0"
+    "eslint-plugin-jest": "^23.6.0",
+    "jest": "^25.1.0",
+    "jest-cli": "^25.1.0"
   },
   "dependencies": {
     "commander": "^4.1.1",
     "fs": "0.0.1-security",
     "lodash": "^4.17.15",
     "source-map-support": "^0.5.16"
-  }
+  },
+  "optionalDependencies": {
+    "fsevents": "1.2.9"
+  },
+  "_comment": "fsevent@1.2.9 is locked in to prevent broken builds on windows for v1.2.11"
 }

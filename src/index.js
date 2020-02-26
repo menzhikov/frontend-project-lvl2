@@ -23,8 +23,12 @@ const genDiff = (firstConfig, secondConfig) => {
   if (!isValidConfig(firstConfig) || !isValidConfig(secondConfig)) {
     return '';
   }
-  const objectBefore = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), firstConfig), encoding));
-  const objectAfter = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), secondConfig), encoding));
+  const objectBefore = JSON.parse(
+    fs.readFileSync(path.resolve(process.cwd(), firstConfig), encoding),
+  );
+  const objectAfter = JSON.parse(
+    fs.readFileSync(path.resolve(process.cwd(), secondConfig), encoding),
+  );
 
   const uniqKeys = _.uniq([...Object.keys(objectBefore), ...Object.keys(objectAfter)]);
 
