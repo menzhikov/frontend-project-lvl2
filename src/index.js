@@ -6,18 +6,25 @@ import format from './utils';
 const encoding = 'utf8';
 const states = { new: '+', old: '-', unchanged: ' ' };
 
-const genDiff = (firstConfig, secondConfig) => {
-  console.log(process.cwd());
-  const pathToFile1 = path.resolve(process.cwd(), firstConfig);
-  const pathToFile2 = path.resolve(process.cwd(), secondConfig);
-
-  if ((!fs.existsSync(pathToFile1) && fs.lstatSync(pathToFile1).isDirectory())
-   || (!fs.existsSync(pathToFile2) && fs.lstatSync(pathToFile2).isDirectory())) {
-    return '';
+const isValidConfig = (config) => {
+  if (!_.isString(config) || config.length === 0) {
+    return false;
   }
 
-  const objectBefore = JSON.parse(fs.readFileSync(pathToFile1, encoding));
-  const objectAfter = JSON.parse(fs.readFileSync(pathToFile2, encoding));
+  const pathToFile = path.resolve(process.cwd(), config);
+  if (!fs.existsSync(pathToFile) || fs.lstatSync(pathToFile).isDirectory()) {
+    return false;
+  }
+
+  return true;
+};
+
+const genDiff = (firstConfig, secondConfig) => {
+  if (!isValidConfig(firstConfig) || !isValidConfig(secondConfig)) {
+    return '';
+  }
+  const objectBefore = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), firstConfig), encoding));
+  const objectAfter = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), secondConfig), encoding));
 
   const uniqKeys = _.uniq([...Object.keys(objectBefore), ...Object.keys(objectAfter)]);
 

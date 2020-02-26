@@ -1,6 +1,7 @@
-install:
-	rm -rf node_modules
-	npm install
+install: install-deps
+
+install-deps:
+	npm ci
 
 start:
 	npx babel-node src/bin/gendiff.js before.json after.json
@@ -14,3 +15,9 @@ lint:
 build:
 	rm -rf dist
 	npm run build
+
+test:
+	npm test -- --watch
+
+test-coverage:
+	npm test -- --coverage
