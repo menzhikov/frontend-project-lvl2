@@ -5,6 +5,8 @@
     - jest
     # https://github.com/babel/eslint-plugin-babel
     - babel
+    # https://github.com/SonarSource/eslint-plugin-sonarjs
+    - sonarjs
   
   # https://eslint.org/docs/user-guide/configuring#specifying-environments
   env:
@@ -17,6 +19,7 @@
   extends:
     - 'airbnb-base'
     - 'plugin:jest/recommended'
+    - 'plugin:sonarjs/recommended'
   
   rules:
     no-console: 0

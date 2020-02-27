@@ -34,11 +34,12 @@ const genDiff = (firstConfig, secondConfig) => {
     const hasObjectAfterKey = _.has(objectAfter, key);
     const hasObjectBeforeKey = _.has(objectBefore, key);
     const isEqualValuesByKey = objectAfter[key] === objectBefore[key];
+    const hasSameKey = hasObjectAfterKey && hasObjectBeforeKey;
     let result;
-    if (hasObjectAfterKey && hasObjectBeforeKey && isEqualValuesByKey) {
+    if (hasSameKey && isEqualValuesByKey) {
       result = { key: [key], value: objectBefore[key], state: states.unchanged };
     }
-    if (hasObjectAfterKey && hasObjectBeforeKey && !isEqualValuesByKey) {
+    if (hasSameKey && !isEqualValuesByKey) {
       const oldValue = { key: [key], value: objectBefore[key], state: states.old };
       const newValue = { key: [key], value: objectAfter[key], state: states.new };
       result = [oldValue, newValue];
