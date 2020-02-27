@@ -19,6 +19,35 @@ const isValidConfig = (config) => {
   return true;
 };
 
+const mapToChanges = (objectAfter, objectBefore) => (key) => {
+  const hasObjectAfterKey = _.has(objectAfter, key);
+  const hasObjectBeforeKey = _.has(objectBefore, key);
+  const isEqualValuesByKey = objectAfter[key] === objectBefore[key];
+  const hasSameKey = hasObjectAfterKey && hasObjectBeforeKey;
+
+  let result;
+
+  if (hasSameKey && isEqualValuesByKey) {
+    result = { key: [key], value: objectBefore[key], state: states.unchanged };
+  }
+
+  if (hasSameKey && !isEqualValuesByKey) {
+    const oldValue = { key: [key], value: objectBefore[key], state: states.old };
+    const newValue = { key: [key], value: objectAfter[key], state: states.new };
+    result = [oldValue, newValue];
+  }
+
+  if (hasObjectAfterKey && !hasObjectBeforeKey) {
+    result = { key: [key], value: objectAfter[key], state: states.new };
+  }
+
+  if (!hasObjectAfterKey && hasObjectBeforeKey) {
+    result = { key: [key], value: objectBefore[key], state: states.old };
+  }
+
+  return result;
+};
+
 const genDiff = (firstConfig, secondConfig) => {
   if (!isValidConfig(firstConfig) || !isValidConfig(secondConfig)) {
     return '';
@@ -30,28 +59,7 @@ const genDiff = (firstConfig, secondConfig) => {
     fs.readFileSync(path.resolve(process.cwd(), secondConfig), encoding),
   );
   const uniqKeys = _.uniq([...Object.keys(objectBefore), ...Object.keys(objectAfter)]);
-  const changes = uniqKeys.map((key) => {
-    const hasObjectAfterKey = _.has(objectAfter, key);
-    const hasObjectBeforeKey = _.has(objectBefore, key);
-    const isEqualValuesByKey = objectAfter[key] === objectBefore[key];
-    const hasSameKey = hasObjectAfterKey && hasObjectBeforeKey;
-    let result;
-    if (hasSameKey && isEqualValuesByKey) {
-      result = { key: [key], value: objectBefore[key], state: states.unchanged };
-    }
-    if (hasSameKey && !isEqualValuesByKey) {
-      const oldValue = { key: [key], value: objectBefore[key], state: states.old };
-      const newValue = { key: [key], value: objectAfter[key], state: states.new };
-      result = [oldValue, newValue];
-    }
-    if (hasObjectAfterKey && !hasObjectBeforeKey) {
-      result = { key: [key], value: objectAfter[key], state: states.new };
-    }
-    if (!hasObjectAfterKey && hasObjectBeforeKey) {
-      result = { key: [key], value: objectBefore[key], state: states.old };
-    }
-    return result;
-  });
+  const changes = uniqKeys.map(mapToChanges(objectAfter, objectBefore));
 
   return format(_.flatten(changes));
 };
