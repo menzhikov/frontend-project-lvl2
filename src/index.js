@@ -22,26 +22,21 @@ const isValidConfig = (config) => {
 const mapToChanges = (objectAfter, objectBefore) => (key) => {
   const hasObjectAfterKey = _.has(objectAfter, key);
   const hasObjectBeforeKey = _.has(objectBefore, key);
-  const isEqualValuesByKey = objectAfter[key] === objectBefore[key];
   const hasSameKey = hasObjectAfterKey && hasObjectBeforeKey;
+  const isEqualValuesByKey = objectAfter[key] === objectBefore[key];
+  const isSameEntry = hasSameKey && isEqualValuesByKey;
 
   let result;
 
-  if (hasSameKey && isEqualValuesByKey) {
+  if (isSameEntry) {
     result = { key: [key], value: objectBefore[key], state: states.unchanged };
-  }
-
-  if (hasSameKey && !isEqualValuesByKey) {
+  } else if (hasSameKey) {
     const oldValue = { key: [key], value: objectBefore[key], state: states.old };
     const newValue = { key: [key], value: objectAfter[key], state: states.new };
     result = [oldValue, newValue];
-  }
-
-  if (hasObjectAfterKey && !hasObjectBeforeKey) {
+  } else if (hasObjectAfterKey) {
     result = { key: [key], value: objectAfter[key], state: states.new };
-  }
-
-  if (!hasObjectAfterKey && hasObjectBeforeKey) {
+  } else if (hasObjectBeforeKey) {
     result = { key: [key], value: objectBefore[key], state: states.old };
   }
 
