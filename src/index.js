@@ -2,16 +2,17 @@ import _ from 'lodash';
 import path from 'path';
 import fs from 'fs';
 import format from './utils';
+import getParser from './parsers';
 
 const encoding = 'utf8';
 const states = { new: '+', old: '-', unchanged: ' ' };
 
-const isValidConfig = (config) => {
-  if (!_.isString(config) || config.length === 0) {
+const isValidConfigPath = (configPath) => {
+  if (!_.isString(configPath) || configPath.length === 0) {
     return false;
   }
 
-  const pathToFile = path.resolve(process.cwd(), config);
+  const pathToFile = path.resolve(process.cwd(), configPath);
   if (!fs.existsSync(pathToFile) || fs.lstatSync(pathToFile).isDirectory()) {
     return false;
   }
@@ -43,16 +44,18 @@ const mapToChanges = (objectAfter, objectBefore) => (key) => {
   return result;
 };
 
-const genDiff = (firstConfig, secondConfig) => {
-  if (!isValidConfig(firstConfig) || !isValidConfig(secondConfig)) {
+const parseFileContent = (configPath) => {
+  const parse = getParser(configPath);
+  const filepath = path.resolve(process.cwd(), configPath);
+  return parse(fs.readFileSync(filepath, encoding));
+};
+
+const genDiff = (firstConfigPath, secondConfigPath) => {
+  if (!isValidConfigPath(firstConfigPath) || !isValidConfigPath(secondConfigPath)) {
     return '';
   }
-  const objectBefore = JSON.parse(
-    fs.readFileSync(path.resolve(process.cwd(), firstConfig), encoding),
-  );
-  const objectAfter = JSON.parse(
-    fs.readFileSync(path.resolve(process.cwd(), secondConfig), encoding),
-  );
+  const objectBefore = parseFileContent(firstConfigPath);
+  const objectAfter = parseFileContent(secondConfigPath);
   const uniqKeys = _.uniq([...Object.keys(objectBefore), ...Object.keys(objectAfter)]);
   const changes = uniqKeys.map(mapToChanges(objectAfter, objectBefore));
 
