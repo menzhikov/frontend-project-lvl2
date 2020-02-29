@@ -11,13 +11,11 @@ const result = {
   host: 'hexlet.io',
 };
 
-test('parse json', () => {
-  const filename = 'after.json';
-  expect(getParser(filename)(readFile(filename))).toEqual(result);
-});
-
-test('parse yaml', () => {
-  const filename = 'after.yml';
+test.each([
+  ['after.json'],
+  ['after.yml'],
+  ['after.ini'],
+])('parse file %s', (filename) => {
   expect(getParser(filename)(readFile(filename))).toEqual(result);
 });
 

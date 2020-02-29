@@ -6,24 +6,20 @@ const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', 
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
 const result = readFile('result.txt');
-let after;
-let before;
-
-beforeEach(() => {
-  after = getFixturePath('after.json');
-  before = getFixturePath('before.json');
-});
 
 test('main validation checks', () => {
+  const configPath = getFixturePath('after.json');
   expect(genDiff('', '')).toEqual('');
-  expect(genDiff(after, '')).toEqual('');
-  expect(genDiff('', before)).toEqual('');
+  expect(genDiff(configPath, '')).toEqual('');
+  expect(genDiff('', configPath)).toEqual('');
 });
 
-test('genDiff for json', () => {
-  expect(genDiff(before, after)).toEqual(result);
-});
-
-test('genDiff for yaml', () => {
-  expect(genDiff(before, after)).toEqual(result);
+test.each([
+  ['before.json', 'after.json'],
+  ['before.yml', 'after.yml'],
+  ['before.ini', 'after.ini'],
+])('genDiff for %s and %s', (firstConfig, secondConfig) => {
+  const firstConfigPath = getFixturePath(firstConfig);
+  const secondConfigPath = getFixturePath(secondConfig);
+  expect(genDiff(firstConfigPath, secondConfigPath)).toEqual(result);
 });
