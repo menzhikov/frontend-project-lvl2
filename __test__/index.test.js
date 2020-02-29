@@ -6,22 +6,24 @@ const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', 
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
 const result = readFile('result.txt');
+let after;
+let before;
+
+beforeEach(() => {
+  after = getFixturePath('after.json');
+  before = getFixturePath('before.json');
+});
+
 test('main validation checks', () => {
-  const after = getFixturePath('after.json');
-  const before = getFixturePath('before.json');
   expect(genDiff('', '')).toEqual('');
   expect(genDiff(after, '')).toEqual('');
   expect(genDiff('', before)).toEqual('');
 });
 
 test('genDiff for json', () => {
-  const after = getFixturePath('after.json');
-  const before = getFixturePath('before.json');
   expect(genDiff(before, after)).toEqual(result);
 });
 
 test('genDiff for yaml', () => {
-  const after = getFixturePath('after.yml');
-  const before = getFixturePath('before.yml');
   expect(genDiff(before, after)).toEqual(result);
 });

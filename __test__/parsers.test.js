@@ -13,14 +13,12 @@ const result = {
 
 test('parse json', () => {
   const filename = 'after.json';
-  const fileContent = readFile(filename);
-  expect(getParser(filename)(fileContent)).toEqual(result);
+  expect(getParser(filename)(readFile(filename))).toEqual(result);
 });
 
 test('parse yaml', () => {
   const filename = 'after.yml';
-  const fileContent = readFile(filename);
-  expect(getParser(filename)(fileContent)).toEqual(result);
+  expect(getParser(filename)(readFile(filename))).toEqual(result);
 });
 
 test('exception test', () => {
