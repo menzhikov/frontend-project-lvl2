@@ -52,7 +52,7 @@
   "dependencies": {
     "commander": "^4.1.1",
     "fs": "0.0.1-security",
-    "ini": "^1.3.5",
+    "ini": "^1.3.6",
     "js-ini": "^1.1.3",
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.15",
